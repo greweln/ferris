@@ -2,9 +2,7 @@ use std::io::Read;
 use std::process::{Command, Stdio};
 
 // Run an external command with arguments and return its output.
-/// > [`std::process::Command::output`] will not work within Penrose due to the
-/// > way that signal handling is set up. Use this function if you need to access the
-/// > output of a process that you spawn.
+/// > [`std::process::Command::output`] will not work within Penrose
 pub fn run_command_for_output_with_args(cmd: String, args: &[&str]) -> std::io::Result<String> {
     let mut child = match Command::new(&cmd).args(args).stdout(Stdio::piped()).spawn() {
         Ok(child) => child,
