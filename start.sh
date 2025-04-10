@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-# Make sure Gwm  runs only once
+# Make sure Ferris  runs only once
 pid=$$
 pgrep -fi /home/me/.config/ferris/start.sh | grep -v "^$pid$" | xargs -I{} kill {}
 
