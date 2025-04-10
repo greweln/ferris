@@ -1,0 +1,12 @@
+[package]
+name = "ferris"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+penrose = { git = "https://github.com/greweln/penrose.git", branch = "ferris" }
+penrose_ui = { git = "https://github.com/greweln/penrose.git", branch = "ferris" }
+
+# penrose = { path = "/home/me/Git/penrose"}
+# penrose_ui = { path = "/home/me/Git/penrose/crates/penrose_ui"}
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
