@@ -1,4 +1,5 @@
-use crate::{BAR_BACKGROUND, WHITE_BRIGHT, util::run_command_for_output_with_args};
+use crate::{BAR_BACKGROUND, WHITE_BRIGHT};
+use penrose::util::spawn_for_output_with_args;
 use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
 
 use std::time::Duration;
@@ -11,10 +12,9 @@ pub fn time_date() -> IntervalText {
     };
 
     let text = || -> Option<String> {
-        let output =
-            run_command_for_output_with_args("date".to_string(), &["+%a-%d-%b %H:%M:%S"]).ok()?;
+        let output = spawn_for_output_with_args("date", &["+%a-%d-%b %H:%M:%S"]).ok()?;
         Some(output)
     };
 
-    IntervalText::new(style, text, Duration::from_secs(1), true, true)
+    IntervalText::new(style, text, Duration::from_secs(1), false, true)
 }

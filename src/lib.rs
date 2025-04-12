@@ -1,7 +1,6 @@
 pub mod bar;
 pub mod errors;
 pub mod keys;
-pub mod util;
 pub mod widgets;
 
 pub type FerrisResult<T> = std::result::Result<T, errors::FerrisErrors>;
@@ -13,10 +12,13 @@ pub const TERMINAL: &str = "st";
 pub const WHITE: u32 = 0x696969ff;
 pub const WHITE_BRIGHT: u32 = 0xc0c0c0ff;
 pub const RED: u32 = 0x8c4665ff;
+pub const GRAY: u32 = 0x696969ff;
+pub const CYAN: u32 = 0x7c7c99ff;
+pub const GREEN: u32 = 0x436a6aff;
 
 // Windows
 pub const BORDER_NORMAL: u32 = 0x222222ff;
-pub const BORDER_SELECTED: u32 = 0x696969ff;
+pub const BORDER_SELECTED: u32 = 0x696969ff; //999999
 pub const MAX_MAIN: u32 = 1;
 pub const RATIO: f32 = 0.6;
 pub const RATIO_CENTER: f32 = 0.5;
@@ -25,10 +27,10 @@ pub const OUTER_PX: u32 = 0;
 pub const INNER_PX: u32 = 0;
 
 // Bar
-pub const BAR_HEIGHT_PX: u32 = 28;
-pub const BAR_BACKGROUND: u32 = 0x262626ff;
-pub const FONT: &str = "TerminessNerdFont-15";
-pub const FONT_SIZE: u8 = 18;
+pub const BAR_HEIGHT_PX: u32 = 22;
+pub const BAR_BACKGROUND: u32 = 0x101010ff;
+pub const FONT: &str = "terminus";
+pub const FONT_SIZE: u8 = 12;
 
 // Workspaces
 pub const WS_HIGHLIGHT: u32 = 0x899ca1ff; // BG => focused screen, FG => unfocused screens
