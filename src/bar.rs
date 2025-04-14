@@ -1,6 +1,6 @@
 use crate::{
     BAR_BACKGROUND, BAR_HEIGHT_PX, FONT, FONT_SIZE, FerrisResult, WS_BG, WS_FG, WS_HIGHLIGHT,
-    widgets::{battery, parantheses, time_date},
+    widgets::{battery, brackets, time_date, volume, wifi},
 };
 use penrose::x::XConn;
 use penrose_ui::{
@@ -26,10 +26,16 @@ pub fn bar<X: XConn>() -> FerrisResult<StatusBar<X>> {
         FONT_SIZE,
         vec![
             Box::new(workspaces),
-            Box::new(parantheses::battery_open()),
-            Box::new(battery::battery()),
-            Box::new(parantheses::close()),
-            Box::new(time_date::time_date()),
+            Box::new(brackets::open_greedy("[ BAT")),
+            Box::new(battery::widget()),
+            Box::new(brackets::close()),
+            Box::new(brackets::open("[ WiFi")),
+            Box::new(wifi::widget()),
+            Box::new(brackets::close()),
+            Box::new(brackets::open("[ VOL")),
+            Box::new(volume::widget()),
+            Box::new(brackets::close()),
+            Box::new(time_date::widget()),
         ],
     )?;
 

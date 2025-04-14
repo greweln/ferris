@@ -1,3 +1,5 @@
 pub mod battery;
-pub mod parantheses;
+pub mod brackets;
 pub mod time_date;
+pub mod volume;
+pub mod wifi;

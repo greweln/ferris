@@ -1,6 +1,7 @@
 pub mod bar;
 pub mod errors;
 pub mod keys;
+pub mod util;
 pub mod widgets;
 
 pub type FerrisResult<T> = std::result::Result<T, errors::FerrisErrors>;
@@ -12,8 +13,7 @@ pub const TERMINAL: &str = "st";
 pub const WHITE: u32 = 0x696969ff;
 pub const WHITE_BRIGHT: u32 = 0xc0c0c0ff;
 pub const RED: u32 = 0x8c4665ff;
-pub const GRAY: u32 = 0x696969ff;
-pub const CYAN: u32 = 0x7c7c99ff;
+pub const GREY: u32 = 0x696969ff;
 pub const GREEN: u32 = 0x436a6aff;
 
 // Windows

@@ -1,6 +1,6 @@
 use std::fmt;
 
-// Implement my own error type to cmplicate my life ...
+// Implement my own error type to .... just to complicate my life ...
 
 #[derive(Debug)]
 pub enum FerrisErrors {

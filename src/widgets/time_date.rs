@@ -4,17 +4,25 @@ use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
 
 use std::time::Duration;
 
-pub fn time_date() -> IntervalText {
-    let style = TextStyle {
+fn text() -> Option<String> {
+    let output = spawn_for_output_with_args("date", &["+%a-%d-%b %H:%M:%S"]).ok()?;
+    Some(output)
+}
+
+fn style() -> TextStyle {
+    TextStyle {
         fg: WHITE_BRIGHT.into(),
         bg: Some(BAR_BACKGROUND.into()),
-        padding: (6, 4),
-    };
+        padding: (1, 1),
+    }
+}
 
-    let text = || -> Option<String> {
-        let output = spawn_for_output_with_args("date", &["+%a-%d-%b %H:%M:%S"]).ok()?;
-        Some(output)
-    };
-
-    IntervalText::new(style, text, Duration::from_secs(1), false, true)
+pub fn widget() -> IntervalText {
+    IntervalText::new(
+        || -> TextStyle { style() },
+        || text(),
+        Duration::from_secs(1),
+        false,
+        true,
+    )
 }

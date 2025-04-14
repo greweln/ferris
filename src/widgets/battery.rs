@@ -1,79 +1,53 @@
-use penrose::util::spawn_for_output_with_args;
+use crate::{BAR_BACKGROUND, GREEN, GREY, RED, util::read_sys_file};
 use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
 
-use crate::{BAR_BACKGROUND, GREEN, RED};
 use std::time::Duration;
 
-#[derive(Debug, PartialEq)]
-enum BatteryStatus {
-    Charging,
-    Discharging,
-    Unknown,
-    NotCharging,
-    Full,
-}
-
 struct Battery {
-    status: BatteryStatus,
     percentage: u32,
+    is_plugged: bool,
 }
 
 impl Battery {
     fn new() -> Self {
-        let status_raw =
-            spawn_for_output_with_args("cat", &["/sys/class/power_supply/BAT0/status"])
-                .unwrap_or_else(|_err| "?".to_owned());
+        let percentage = read_sys_file("/sys/class/power_supply/BAT0/capacity")
+            .parse::<u32>()
+            .unwrap_or(0);
 
-        let percentage =
-            spawn_for_output_with_args("cat", &["/sys/class/power_supply/BAT0/capacity"])
-                .unwrap_or_else(|_err| "0".to_owned())
-                .parse::<u32>()
-                .unwrap_or(0);
+        let is_plugged = read_sys_file("/sys/class/power_supply/AC/online");
 
-        let status = match status_raw.trim() {
-            "Discharging" => BatteryStatus::Discharging,
-            "Charging" => BatteryStatus::Charging,
-            "Not charging" => BatteryStatus::NotCharging,
-            "Full" => BatteryStatus::Full,
-            _ => BatteryStatus::Unknown,
+        let is_plugged = match is_plugged.as_str() {
+            "1" => true,
+            _ => false,
         };
 
-        Self { status, percentage }
-    }
-
-    fn style(&self) -> TextStyle {
-        if self.percentage < 20 && self.status != BatteryStatus::Charging {
-            TextStyle {
-                fg: RED.into(),
-                bg: Some(BAR_BACKGROUND.into()),
-                padding: (6, 4),
-            }
-        } else {
-            TextStyle {
-                fg: GREEN.into(),
-                bg: Some(BAR_BACKGROUND.into()),
-                padding: (6, 4),
-            }
+        Self {
+            percentage,
+            is_plugged,
         }
     }
+    fn style(&self) -> TextStyle {
+        let color = if self.is_plugged {
+            GREEN
+        } else {
+            if self.percentage < 20 { RED } else { GREY }
+        };
 
-    fn icon(&self) -> &'static str {
-        match self.status {
-            BatteryStatus::Discharging => "↓",
-            BatteryStatus::Charging => "↑",
-            BatteryStatus::NotCharging | BatteryStatus::Full => "",
-            BatteryStatus::Unknown => "?",
+        TextStyle {
+            fg: color.into(),
+            bg: Some(BAR_BACKGROUND.into()),
+            padding: (1, 1),
         }
     }
 
     fn text(&self) -> String {
-        format!("{}{}%", self.icon(), self.percentage)
+        format!("{}%", self.percentage)
     }
 }
 
-pub fn battery() -> IntervalText {
+pub fn widget() -> IntervalText {
     IntervalText::new(
-        Battery::new().style(),
+        || Battery::new().style(),
         || Some(Battery::new().text()),
         Duration::from_secs(1),
         false,
