@@ -1,6 +1,6 @@
 use crate::{
     BAR_BACKGROUND, BAR_HEIGHT_PX, FONT, FONT_SIZE, FerrisResult, WS_BG, WS_FG, WS_HIGHLIGHT,
-    widgets::{battery, brackets, time_date, volume, wifi},
+    bar::widgets::{battery, brackets, time_date, volume, wifi},
 };
 use penrose::x::XConn;
 use penrose_ui::{
@@ -9,7 +9,7 @@ use penrose_ui::{
     core::TextStyle,
 };
 
-pub fn bar<X: XConn>() -> FerrisResult<StatusBar<X>> {
+pub fn config<X: XConn>() -> FerrisResult<StatusBar<X>> {
     let workspace_style = TextStyle {
         fg: WS_FG.into(),
         bg: Some(WS_BG.into()),

@@ -1,4 +1,4 @@
-use crate::{BAR_BACKGROUND, GREEN, GREY, RED, util::read_sys_file};
+use crate::{BAR_BACKGROUND, GREEN, GREY, RED, utils::helpers::read_sys_file};
 use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
 
 use std::time::Duration;
@@ -26,6 +26,7 @@ impl Battery {
             is_plugged,
         }
     }
+
     fn style(&self) -> TextStyle {
         let color = if self.is_plugged {
             GREEN

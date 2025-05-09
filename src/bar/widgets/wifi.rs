@@ -1,4 +1,4 @@
-use crate::{BAR_BACKGROUND, GREY, RED, util::read_sys_file};
+use crate::{BAR_BACKGROUND, GREY, RED, utils::helpers::read_sys_file};
 use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
 use std::time::Duration;
 

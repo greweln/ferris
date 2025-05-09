@@ -64,11 +64,12 @@ fn main() -> FerrisResult<()> {
     );
 
     // Bar
-    let bar = bar::bar().unwrap();
+    let bar = bar::config::config().unwrap();
     let key_bindings = parse_keybindings_with_xmodmap(keys::key_bindings(terminal))?;
     let config = add_ewmh_hooks(config());
     let wm = WindowManager::new(config, key_bindings, HashMap::new(), conn)?;
     let wm = bar.add_to(wm);
+
     // Add scratchpads, bar to the WM
     let wm = add_named_scratchpads(wm, vec![spt]);
 

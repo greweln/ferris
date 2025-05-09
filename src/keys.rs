@@ -1,3 +1,4 @@
+use crate::{TERMINAL, apps::apps};
 use penrose::{
     builtin::{
         actions::{exit, modify_with, send_layout_message, spawn},
@@ -12,8 +13,6 @@ use std::collections::HashMap;
 fn fullscreen() -> Box<dyn KeyEventHandler<RustConn>> {
     toggle_fullscreen()
 }
-
-use crate::TERMINAL;
 
 pub fn key_bindings(
     terminal: ToggleNamedScratchPad,
@@ -36,7 +35,7 @@ pub fn key_bindings(
         ("A-l", modify_with(|cs| cs.previous_layout())),
         ("M-m", spawn("maim -s /home/me/Downloads/screenshot.png")),
         ("M-o", Box::new(terminal)),
-        ("M-semicolon", spawn("dmenu_run")),
+        ("M-semicolon", apps()),
         ("M-C-x", spawn("pkill -fi ferris")),
         ("M-C-r", exit()),
         (
