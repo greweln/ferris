@@ -71,6 +71,7 @@ dependencies = [
 name = "ferris"
 version = "0.1.0"
 dependencies = [
+ "once_cell",
  "penrose",
  "penrose_ui",
  "tracing-subscriber",

@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use ferris::*;
+use ferris::{
+    BAR_HEIGHT_PX, COLORS, FerrisResult, INNER_PX, MAX_MAIN, OUTER_PX, RATIO_CENTER, RATIO_STEP,
+    STARTUP_SCRIPT, TERMINAL, bar, keys,
+};
 use penrose::{
     builtin::{hooks::SpacingHook, layout::CenteredMain},
     core::{Config, WindowManager, bindings::parse_keybindings_with_xmodmap},
@@ -9,7 +12,7 @@ use penrose::{
         manage::FloatingCentered,
     },
     stack,
-    x::query::ClassName,
+    x::query::AppName,
     x11rb::RustConn,
 };
 use tracing_subscriber::{self, prelude::*};
@@ -35,8 +38,8 @@ fn config() -> Config<RustConn> {
     let startup_hook = Box::new(vec![SpawnOnStartup::boxed(STARTUP_SCRIPT)]);
 
     Config {
-        normal_border: BORDER_NORMAL.into(),
-        focused_border: BORDER_SELECTED.into(),
+        normal_border: COLORS.black,
+        focused_border: COLORS.foreground,
         border_width: 1,
         focus_follow_mouse: true,
         default_layouts: layout,
@@ -57,21 +60,32 @@ fn main() -> FerrisResult<()> {
     // Scratchpads
     let (spt, terminal) = NamedScratchPad::new(
         "terminal",
-        format!("{} -c SpTerm", TERMINAL),
-        ClassName("SpTerm"),
+        format!("{} -n SpTerm", TERMINAL),
+        AppName("SpTerm"),
+        FloatingCentered::new(0.8, 0.8),
+        true,
+    );
+
+    let (spg, gpass) = NamedScratchPad::new(
+        "gpass",
+        format!(
+            "timeout  2m {} -n SpGpass -e gpass /home/me/gpass.json",
+            TERMINAL
+        ),
+        AppName("SpGpass"),
         FloatingCentered::new(0.8, 0.8),
         true,
     );
 
     // Bar
     let bar = bar::config::config().unwrap();
-    let key_bindings = parse_keybindings_with_xmodmap(keys::key_bindings(terminal))?;
+    let key_bindings = parse_keybindings_with_xmodmap(keys::key_bindings(gpass, terminal))?;
     let config = add_ewmh_hooks(config());
     let wm = WindowManager::new(config, key_bindings, HashMap::new(), conn)?;
     let wm = bar.add_to(wm);
 
     // Add scratchpads, bar to the WM
-    let wm = add_named_scratchpads(wm, vec![spt]);
+    let wm = add_named_scratchpads(wm, vec![spt, spg]);
 
     // Run the Window Manager
     let ferris = wm.run()?;

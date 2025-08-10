@@ -1,5 +1,8 @@
-use crate::{BAR_BACKGROUND, GREY, RED, utils::helpers::read_sys_file};
-use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
+use crate::{COLORS, utils::helpers::read_sys_file};
+use penrose_ui::{
+    bar::widgets::{IntervalText, Text},
+    core::TextStyle,
+};
 use std::time::Duration;
 
 fn signal() -> String {
@@ -16,15 +19,19 @@ fn signal() -> String {
 }
 
 fn style() -> TextStyle {
-    let color = if signal() == "X" { RED } else { GREY };
+    let color = if signal() == "X" {
+        COLORS.red
+    } else {
+        COLORS.foreground
+    };
 
     TextStyle {
         fg: color.into(),
-        bg: Some(BAR_BACKGROUND.into()),
+        bg: Some(COLORS.black),
         padding: (1, 1),
     }
 }
-pub fn widget() -> IntervalText {
+pub fn value() -> IntervalText {
     IntervalText::new(
         || style(),
         || Some(signal()),
@@ -32,4 +39,13 @@ pub fn widget() -> IntervalText {
         false,
         true,
     )
+}
+
+pub fn text() -> Text {
+    let style = TextStyle {
+        fg: COLORS.foreground,
+        bg: Some(COLORS.black),
+        padding: (6, 4),
+    };
+    Text::new("WiFI".trim(), style, false, true)
 }

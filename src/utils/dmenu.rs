@@ -1,4 +1,4 @@
-use crate::{DMENU_FONT, DMENU_NB, DMENU_NF, DMENU_SB, DMENU_SF};
+use crate::{COLORS, DMENU_FONT};
 use penrose::{Color, Result, util::spawn_with_args};
 use std::{
     io::{Read, Write},
@@ -20,7 +20,7 @@ impl DMenu {
     pub fn dmenu_run() -> Result<()> {
         let configs = Flags::default().flags();
         let configs_ref: Vec<&str> = configs.iter().map(|f| f.as_str()).collect();
-        spawn_with_args("dmenu", &configs_ref)?;
+        spawn_with_args("dmenu_run", &configs_ref)?;
         Ok(())
     }
 
@@ -60,10 +60,10 @@ impl Default for Flags {
     fn default() -> Self {
         Self {
             prompt: "=>".to_string(),
-            nb: DMENU_NB.into(),
-            nf: DMENU_NF.into(),
-            sb: DMENU_SB.into(),
-            sf: DMENU_SF.into(),
+            nb: COLORS.black,
+            nf: COLORS.white_bright,
+            sb: COLORS.black_bright,
+            sf: COLORS.white_bright,
             lines: 10,
             font: DMENU_FONT.to_string(),
             ignore_case: true,

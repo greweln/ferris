@@ -1,6 +1,9 @@
-use crate::{BAR_BACKGROUND, GREY, RED};
+use crate::COLORS;
 use penrose::util::spawn_for_output_with_args;
-use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
+use penrose_ui::{
+    bar::widgets::{IntervalText, Text},
+    core::TextStyle,
+};
 use std::time::Duration;
 
 struct Volume {
@@ -30,14 +33,14 @@ impl Volume {
 
     fn style(&self) -> TextStyle {
         let color = if self.is_mute || self.percentage > 100 {
-            RED
+            COLORS.red
         } else {
-            GREY
+            COLORS.foreground
         };
 
         TextStyle {
             fg: color.into(),
-            bg: Some(BAR_BACKGROUND.into()),
+            bg: Some(COLORS.black),
             padding: (1, 1),
         }
     }
@@ -51,7 +54,7 @@ impl Volume {
     }
 }
 
-pub fn widget() -> IntervalText {
+pub fn value() -> IntervalText {
     IntervalText::new(
         || Volume::new().style(),
         || Some(Volume::new().text()),
@@ -59,4 +62,13 @@ pub fn widget() -> IntervalText {
         false,
         true,
     )
+}
+
+pub fn text() -> Text {
+    let style = TextStyle {
+        fg: COLORS.foreground,
+        bg: Some(COLORS.black),
+        padding: (6, 4),
+    };
+    Text::new("VOL".trim(), style, false, true)
 }

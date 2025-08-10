@@ -10,7 +10,7 @@ use penrose::{
     x11rb::RustConn,
 };
 
-pub fn apps() -> Box<dyn KeyEventHandler<RustConn>> {
+pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
     key_handler(|_, _| {
         let flags = Flags::default();
 
@@ -26,7 +26,7 @@ pub fn apps() -> Box<dyn KeyEventHandler<RustConn>> {
         if let Ok(val) = dmenu.run() {
             match val.as_str().trim() {
                 "Browser" => spawn(BROWSER),
-                // "Joplin" => joplin(),
+                "Joplin" => spawn_with_args(TERMINAL, &["-e", "joplin"]),
                 "Yazi" => spawn_with_args(TERMINAL, &["-e", "yazi"]),
                 "Calcurse" => spawn_with_args(TERMINAL, &["-e", "calcurse"]),
                 // "Icons" => icons(),

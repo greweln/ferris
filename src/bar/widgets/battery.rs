@@ -1,5 +1,8 @@
-use crate::{BAR_BACKGROUND, GREEN, GREY, RED, utils::helpers::read_sys_file};
-use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
+use crate::{COLORS, utils::helpers::read_sys_file};
+use penrose_ui::{
+    bar::widgets::{IntervalText, Text},
+    core::TextStyle,
+};
 
 use std::time::Duration;
 
@@ -29,14 +32,18 @@ impl Battery {
 
     fn style(&self) -> TextStyle {
         let color = if self.is_plugged {
-            GREEN
+            COLORS.green
         } else {
-            if self.percentage < 20 { RED } else { GREY }
+            if self.percentage < 20 {
+                COLORS.red
+            } else {
+                COLORS.foreground
+            }
         };
 
         TextStyle {
             fg: color.into(),
-            bg: Some(BAR_BACKGROUND.into()),
+            bg: Some(COLORS.black),
             padding: (1, 1),
         }
     }
@@ -46,7 +53,7 @@ impl Battery {
     }
 }
 
-pub fn widget() -> IntervalText {
+pub fn value() -> IntervalText {
     IntervalText::new(
         || Battery::new().style(),
         || Some(Battery::new().text()),
@@ -54,4 +61,13 @@ pub fn widget() -> IntervalText {
         false,
         true,
     )
+}
+
+pub fn text() -> Text {
+    let style = TextStyle {
+        fg: COLORS.foreground,
+        bg: Some(COLORS.black),
+        padding: (6, 4),
+    };
+    Text::new("BAT".trim(), style, false, true)
 }

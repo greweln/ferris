@@ -1,4 +1,4 @@
-use crate::{BAR_BACKGROUND, WHITE_BRIGHT};
+use crate::COLORS;
 use penrose::util::spawn_for_output_with_args;
 use penrose_ui::{bar::widgets::IntervalText, core::TextStyle};
 
@@ -11,8 +11,8 @@ fn text() -> Option<String> {
 
 fn style() -> TextStyle {
     TextStyle {
-        fg: WHITE_BRIGHT.into(),
-        bg: Some(BAR_BACKGROUND.into()),
+        fg: COLORS.white_bright,
+        bg: Some(COLORS.black),
         padding: (1, 1),
     }
 }
