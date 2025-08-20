@@ -19,13 +19,13 @@ pub fn config<X: XConn>() -> FerrisResult<StatusBar<X>> {
     let workspaces = Workspaces::new(
         workspace_style,
         COLORS.yellow, // hightlight
-        COLORS.background,
+        COLORS.black,
     );
 
     let bar = StatusBar::try_new(
         Position::Top,
         BAR_HEIGHT_PX,
-        COLORS.black,
+        COLORS.background, // override by the first widget due to its greedy feature
         FONT,
         FONT_SIZE,
         vec![

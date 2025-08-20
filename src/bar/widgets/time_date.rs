@@ -12,7 +12,7 @@ fn text() -> Option<String> {
 fn style() -> TextStyle {
     TextStyle {
         fg: COLORS.white_bright,
-        bg: Some(COLORS.black),
+        bg: Some(COLORS.background),
         padding: (1, 1),
     }
 }

@@ -40,7 +40,7 @@ impl Volume {
 
         TextStyle {
             fg: color.into(),
-            bg: Some(COLORS.black),
+            bg: Some(COLORS.background),
             padding: (1, 1),
         }
     }
@@ -67,7 +67,7 @@ pub fn value() -> IntervalText {
 pub fn text() -> Text {
     let style = TextStyle {
         fg: COLORS.foreground,
-        bg: Some(COLORS.black),
+        bg: Some(COLORS.background),
         padding: (6, 4),
     };
     Text::new("VOL".trim(), style, false, true)
