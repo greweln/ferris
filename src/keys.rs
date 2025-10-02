@@ -15,7 +15,6 @@ fn fullscreen() -> Box<dyn KeyEventHandler<RustConn>> {
 }
 
 pub fn key_bindings(
-    gpass: ToggleNamedScratchPad,
     terminal: ToggleNamedScratchPad,
 ) -> HashMap<String, Box<dyn KeyEventHandler<RustConn>>> {
     let bindings = vec![
@@ -34,7 +33,6 @@ pub fn key_bindings(
         ("M-Left", send_layout_message(|| ShrinkMain)),
         ("A-h", modify_with(|cs| cs.next_layout())),
         ("A-l", modify_with(|cs| cs.previous_layout())),
-        ("M-p", Box::new(gpass)),
         ("M-m", spawn("maim -s /home/me/Downloads/screenshot.png")),
         ("M-o", Box::new(terminal)),
         ("M-semicolon", menu::launch()),

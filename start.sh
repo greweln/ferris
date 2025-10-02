@@ -13,7 +13,7 @@ dunst &
 xrdb /home/me/.Xresources
 
 # Setup monitors
-/home/me/Git/scripts/auto-setup-monitors.sh
+/home/me/Git/tpad/scripts/auto-setup-monitors.sh
 
 # Autoload Xresources
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources || echo "Failed to load .Xresources" >>  ~/logs/xresources.log

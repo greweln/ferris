@@ -40,7 +40,7 @@ impl DMenu {
         let mut choice = String::new();
         proc.stdout.unwrap().read_to_string(&mut choice)?;
 
-        Ok(choice)
+        Ok(choice.trim().to_string())
     }
 }
 
