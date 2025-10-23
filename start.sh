@@ -40,5 +40,5 @@ xset -b
 if [ -e "/home/me/.fehbg" ]; then
     "/home/me/.fehbg" &
 else
-    feh --bg-fill /home/me/.config/ferris/wallpaper.png &
+    feh --bg-fill /home/me/.config/ferris/arch_1.jpeg &
 fi

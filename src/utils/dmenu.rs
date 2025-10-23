@@ -60,10 +60,10 @@ impl Default for Flags {
     fn default() -> Self {
         Self {
             prompt: "=>".to_string(),
-            nb: COLORS.black,
-            nf: COLORS.white_bright,
-            sb: COLORS.black_bright,
-            sf: COLORS.white_bright,
+            nb: COLORS.gray,
+            nf: COLORS.foreground,
+            sb: COLORS.green,
+            sf: COLORS.black,
             lines: 10,
             font: DMENU_FONT.to_string(),
             ignore_case: true,

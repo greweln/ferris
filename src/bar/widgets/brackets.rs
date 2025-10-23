@@ -3,7 +3,7 @@ use penrose_ui::{TextStyle, bar::widgets::Text};
 
 pub fn open() -> Text {
     let style = TextStyle {
-        fg: COLORS.black_bright,
+        fg: COLORS.gray,
         bg: Some(COLORS.background),
         padding: (6, 4),
     };
@@ -14,7 +14,7 @@ pub fn open() -> Text {
 // so that all widgets are pushed to the end of the bar
 pub fn open_greedy() -> Text {
     let style = TextStyle {
-        fg: COLORS.black_bright,
+        fg: COLORS.gray,
         bg: Some(COLORS.background),
         padding: (6, 4),
     };
@@ -23,7 +23,7 @@ pub fn open_greedy() -> Text {
 
 pub fn close() -> Text {
     let style = TextStyle {
-        fg: COLORS.black_bright,
+        fg: COLORS.gray,
         bg: Some(COLORS.background),
         padding: (6, 4),
     };

@@ -29,4 +29,4 @@ pub const FONT: &str = "terminus";
 pub const FONT_SIZE: u8 = 12;
 
 // Dmenu
-const DMENU_FONT: &str = "TerminessNerdFont-18";
+pub const DMENU_FONT: &str = "TerminessNerdFont-18";

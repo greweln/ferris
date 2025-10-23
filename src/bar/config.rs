@@ -11,14 +11,14 @@ use penrose_ui::{
 
 pub fn config<X: XConn>() -> FerrisResult<StatusBar<X>> {
     let workspace_style = TextStyle {
-        fg: COLORS.black_bright,
+        fg: COLORS.gray,
         bg: Some(COLORS.background),
         padding: (0, 0),
     };
 
     let workspaces = Workspaces::new(
         workspace_style,
-        COLORS.yellow, // hightlight
+        COLORS.green, // hightlight
         COLORS.black,
     );
 

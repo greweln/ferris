@@ -16,7 +16,7 @@ pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
         let flags = Flags::default();
 
         let mut menu: Vec<String> = [
-            "Browser", "GPass", "Joplin", "SSH", "Yazi", "Calcurse", "Power", "System",
+            "Browser", "GPass", "Joplin", "SSH", "Yazi", "Calcurse", "Power", "Icons", "System",
         ]
         .into_iter()
         .map(|i| i.to_owned())
@@ -34,6 +34,7 @@ pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
                 "Calcurse" => spawn_with_args(TERMINAL, &["-e", "calcurse"]),
                 "GPass" => spawn_with_args(TERMINAL, &["-e", "gpass", "/home/me/gpass.json"]),
                 "SSH" => ssh(),
+                "Icons" => icons(),
                 "Power" => power(),
                 "System" => DMenu::dmenu_run(),
                 _ => Ok(()),
@@ -42,6 +43,38 @@ pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
             Ok(())
         }
     })
+}
+
+fn icons() -> Result<()> {
+    use std::io::Write;
+    use std::process::{Command, Stdio};
+
+    let icons = ["󱓻 ", " ", "---------------------------------------------"]
+        .into_iter()
+        .map(|i| i.to_owned())
+        .collect();
+
+    let dmenu = DMenu::new(icons, Flags::default());
+
+    if let Ok(val) = dmenu.run() {
+        // Start xclip and open its stdin
+        let mut child = Command::new("xclip")
+            .args(&["-selection", "clipboard"])
+            .stdin(Stdio::piped())
+            .spawn()
+            .expect("Failed to start xclip");
+
+        // Write the text into xclip's stdin
+        if let Some(stdin) = child.stdin.as_mut() {
+            stdin
+                .write_all(val.as_bytes())
+                .expect("Failed to write to xclip");
+        }
+
+        // Wait for xclip to finish
+        child.wait().expect("Failed to wait on xclip");
+    }
+    Ok(())
 }
 
 // Read and parse an ssh config file and display the hosts options in dmenu
