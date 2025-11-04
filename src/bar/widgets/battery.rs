@@ -37,7 +37,7 @@ impl Battery {
             if self.percentage < 20 {
                 COLORS.red
             } else {
-                COLORS.white
+                COLORS.gray_light
             }
         };
 
@@ -65,7 +65,7 @@ pub fn value() -> IntervalText {
 
 pub fn text() -> Text {
     let style = TextStyle {
-        fg: COLORS.white,
+        fg: COLORS.gray_light,
         bg: Some(COLORS.background),
         padding: (6, 4),
     };

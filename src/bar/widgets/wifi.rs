@@ -22,7 +22,7 @@ fn style() -> TextStyle {
     let color = if signal() == "X" {
         COLORS.red
     } else {
-        COLORS.white
+        COLORS.gray_light
     };
 
     TextStyle {
@@ -43,7 +43,7 @@ pub fn value() -> IntervalText {
 
 pub fn text() -> Text {
     let style = TextStyle {
-        fg: COLORS.white,
+        fg: COLORS.gray_light,
         bg: Some(COLORS.background),
         padding: (6, 4),
     };

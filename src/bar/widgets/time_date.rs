@@ -11,7 +11,7 @@ fn text() -> Option<String> {
 
 fn style() -> TextStyle {
     TextStyle {
-        fg: COLORS.gray_light,
+        fg: COLORS.white,
         bg: Some(COLORS.background),
         padding: (1, 1),
     }

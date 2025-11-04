@@ -1,5 +1,5 @@
 use crate::{
-    BAR_HEIGHT_PX, COLORS, FONT, FONT_SIZE, FerrisResult,
+    BAR_HEIGHT_PX, COLORS, FONT, FONT_SIZE, FerrisResult, TEST,
     bar::widgets::{battery, brackets, time_date, volume, wifi},
 };
 use penrose::x::XConn;
@@ -18,14 +18,14 @@ pub fn config<X: XConn>() -> FerrisResult<StatusBar<X>> {
 
     let workspaces = Workspaces::new(
         workspace_style,
-        COLORS.green, // hightlight
+        COLORS.foreground, // hightlight
         COLORS.black,
     );
 
     let bar = StatusBar::try_new(
         Position::Top,
         BAR_HEIGHT_PX,
-        COLORS.background, // override by the first widget due to its greedy feature
+        TEST, // override by the first widget due to its greedy feature
         FONT,
         FONT_SIZE,
         vec![

@@ -35,7 +35,7 @@ impl Volume {
         let color = if self.is_mute || self.percentage > 100 {
             COLORS.red
         } else {
-            COLORS.white
+            COLORS.gray_light
         };
 
         TextStyle {
@@ -66,7 +66,7 @@ pub fn value() -> IntervalText {
 
 pub fn text() -> Text {
     let style = TextStyle {
-        fg: COLORS.white,
+        fg: COLORS.gray_light,
         bg: Some(COLORS.background),
         padding: (6, 4),
     };
