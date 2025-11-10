@@ -35,10 +35,14 @@ impl DMenu {
             .args(flags)
             .spawn()?;
 
-        proc.stdin.take().unwrap().write_all(&options)?;
+        {
+            // write options to stdin
+            let mut stdin = proc.stdin.take().unwrap();
+            stdin.write_all(&options)?;
+        } // <--- critical: stdin is dropped here (EOF to dmenu)
 
         let mut choice = String::new();
-        proc.stdout.unwrap().read_to_string(&mut choice)?;
+        proc.stdout.take().unwrap().read_to_string(&mut choice)?;
 
         Ok(choice.trim().to_string())
     }

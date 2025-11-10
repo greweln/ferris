@@ -11,6 +11,9 @@ use penrose::{
     x11rb::RustConn,
 };
 
+use std::io::Write;
+use std::process::{Command, Stdio};
+
 pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
     key_handler(|_, _| {
         let flags = Flags::default();
@@ -46,9 +49,6 @@ pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
 }
 
 fn icons() -> Result<()> {
-    use std::io::Write;
-    use std::process::{Command, Stdio};
-
     let icons = ["󱓻 ", " ", "---------------------------------------------"]
         .into_iter()
         .map(|i| i.to_owned())
@@ -57,22 +57,17 @@ fn icons() -> Result<()> {
     let dmenu = DMenu::new(icons, Flags::default());
 
     if let Ok(val) = dmenu.run() {
-        // Start xclip and open its stdin
+        // echo "$val" | xclip -selection clipboard
         let mut child = Command::new("xclip")
             .args(&["-selection", "clipboard"])
-            .stdin(Stdio::piped())
+            .stdin(Stdio::piped()) // same as: ... | xclip
             .spawn()
             .expect("Failed to start xclip");
 
         // Write the text into xclip's stdin
         if let Some(stdin) = child.stdin.as_mut() {
-            stdin
-                .write_all(val.as_bytes())
-                .expect("Failed to write to xclip");
+            stdin.write_all(val.as_bytes())?;
         }
-
-        // Wait for xclip to finish
-        child.wait().expect("Failed to wait on xclip");
     }
     Ok(())
 }

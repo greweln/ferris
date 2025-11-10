@@ -60,7 +60,7 @@ fn main() -> FerrisResult<()> {
     // Scratchpads
     let (spt, terminal) = NamedScratchPad::new(
         "terminal",
-        format!("{} -n SpTerm", TERMINAL),
+        format!("{} -e SpTerm", TERMINAL),
         AppName("SpTerm"),
         FloatingCentered::new(0.8, 0.8),
         true,
