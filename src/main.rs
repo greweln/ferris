@@ -12,7 +12,7 @@ use penrose::{
         manage::FloatingCentered,
     },
     stack,
-    x::query::AppName,
+    x::query::ClassName,
     x11rb::RustConn,
 };
 use tracing_subscriber::{self, prelude::*};
@@ -60,8 +60,8 @@ fn main() -> FerrisResult<()> {
     // Scratchpads
     let (spt, terminal) = NamedScratchPad::new(
         "terminal",
-        format!("{} -e SpTerm", TERMINAL),
-        AppName("SpTerm"),
+        format!("{} -c SpTerm", TERMINAL),
+        ClassName("SpTerm"), // AppName ?
         FloatingCentered::new(0.8, 0.8),
         true,
     );
