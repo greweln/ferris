@@ -1,1 +1,1 @@
-### My tiling window manger written in Rust
+### My tiling window manger
