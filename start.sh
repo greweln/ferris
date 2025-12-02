@@ -12,7 +12,7 @@ dunst &
 # Load/reload Xresources
 xrdb /home/me/.Xresources
 
-# Setup monitors
+# Setup monitors and wallpapers
 /home/me/Git/configs/tpad/scripts/auto-setup-monitors.sh
 
 # Autoload Xresources
@@ -36,9 +36,3 @@ find ~ -maxdepth 1 -name ".bash_history-*.tmp" -type f -mtime +0 -delete
 # Disable urxvt bell sound
 xset -b
 
-# Wallpaper
-if [ -e "/home/me/.fehbg" ]; then
-    "/home/me/.fehbg" &
-else
-    feh --bg-fill /home/me/Lab/wallpapers/universe.png &
-fi

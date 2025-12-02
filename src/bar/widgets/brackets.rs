@@ -4,7 +4,7 @@ use penrose_ui::{TextStyle, bar::widgets::Text};
 pub fn open() -> Text {
     let style = TextStyle {
         fg: COLORS.gray,
-        bg: Some(COLORS.background),
+        bg: Some(COLORS.black),
         padding: (6, 4),
     };
     Text::new("[".trim(), style, false, true)
@@ -15,7 +15,7 @@ pub fn open() -> Text {
 pub fn open_greedy() -> Text {
     let style = TextStyle {
         fg: COLORS.gray,
-        bg: Some(COLORS.background),
+        bg: Some(COLORS.black),
         padding: (6, 4),
     };
     Text::new("[".trim(), style, true, true)
@@ -24,7 +24,7 @@ pub fn open_greedy() -> Text {
 pub fn close() -> Text {
     let style = TextStyle {
         fg: COLORS.gray,
-        bg: Some(COLORS.background),
+        bg: Some(COLORS.black),
         padding: (6, 4),
     };
     Text::new("]".trim(), style, false, true)

@@ -3,10 +3,11 @@ use crate::{
     utils::dmenu::{DMenu, Flags},
 };
 use penrose::{
+    Error::Custom,
     Result,
     builtin::actions::key_handler,
     core::bindings::KeyEventHandler,
-    extensions::util::{NotifyLevel, notify_send_custom},
+    extensions::util::{NotifyLevel, notify_send, notify_send_custom},
     util::{spawn, spawn_with_args},
     x11rb::RustConn,
 };
@@ -14,12 +15,15 @@ use penrose::{
 use std::io::Write;
 use std::process::{Command, Stdio};
 
+use std::thread;
+use std::time::Duration;
 pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
     key_handler(|_, _| {
         let flags = Flags::default();
 
         let mut menu: Vec<String> = [
-            "Browser", "GPass", "Joplin", "SSH", "Yazi", "Calcurse", "Power", "Icons", "System",
+            "Timer", "Browser", "GPass", "Joplin", "SSH", "Yazi", "Calcurse", "Power", "Icons",
+            "System",
         ]
         .into_iter()
         .map(|i| i.to_owned())
@@ -31,8 +35,9 @@ pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
 
         if let Ok(val) = dmenu.run() {
             match val.as_str().trim() {
+                "Timer" => timer(),
                 "Browser" => spawn(BROWSER),
-                "Joplin" => spawn_with_args(TERMINAL, &["-e", "joplin"]),
+                "Joplin" => spawn_with_args("st-joplin", &["-e", "joplin"]),
                 "Yazi" => spawn_with_args(TERMINAL, &["-e", "yazi"]),
                 "Calcurse" => spawn_with_args(TERMINAL, &["-e", "calcurse"]),
                 "GPass" => spawn_with_args(TERMINAL, &["-e", "gpass", "/home/me/gpass.json"]),
@@ -48,11 +53,87 @@ pub fn launch() -> Box<dyn KeyEventHandler<RustConn>> {
     })
 }
 
+/// Timer function with inlined input handling
+fn timer() -> Result<()> {
+    /// Convert input like "10s", "5m", "1h" to seconds
+    fn parse_time(input: &str) -> Result<u64> {
+        let input = input.trim().to_lowercase();
+        if input.is_empty() {
+            return Err(Custom("Empty time string".to_string()));
+        }
+
+        let last_char = input.chars().last().unwrap();
+        let (num_str, multiplier) = match last_char {
+            's' => (&input[..input.len() - 1], 1),
+            'm' => (&input[..input.len() - 1], 60),
+            'h' => (&input[..input.len() - 1], 3600),
+            '0'..='9' => (input.as_str(), 1), // default seconds
+            _ => return Err(Custom("Invalid time unit".to_string())),
+        };
+
+        let num: u64 = num_str
+            .parse()
+            .map_err(|_| Custom("Invalid number".to_string()))?;
+        Ok(num * multiplier)
+    }
+
+    let mut flags = Flags::default();
+
+    // --- TIME INPUT ---
+    flags.prompt = "Time (e.g. 10s, 5m, 1h):".into();
+    let time_input = match DMenu::new(vec![], flags.clone()).run() {
+        Ok(t) if t.trim().is_empty() => {
+            notify_send("Timer", "No time value. Exiting")?;
+            return Ok(());
+        }
+        Ok(t) => t,
+        Err(_) => return Ok(()), // ESC → exit silently
+    };
+
+    let time_secs = match parse_time(&time_input) {
+        Ok(secs) if secs > 0 => secs,
+        _ => {
+            notify_send(
+                "Timer",
+                "Timer must be a positive integer or valid time string",
+            )?;
+            return Ok(());
+        }
+    };
+
+    // --- MESSAGE INPUT ---
+    flags.prompt = "Message:".into();
+    let message = match DMenu::new(vec![], flags).run() {
+        Ok(m) if m.trim().is_empty() => "Time's up!".to_string(),
+        Ok(m) => m,
+        Err(_) => "Time's up!".to_string(), // ESC → default message
+    };
+
+    // --- SPAWN BACKGROUND TIMER ---
+    thread::spawn(move || {
+        thread::sleep(Duration::from_secs(time_secs));
+        let _ = Command::new("notify-send")
+            .arg("-u")
+            .arg("critical")
+            .arg("Timer")
+            .arg(&message)
+            .status();
+    });
+
+    Ok(())
+}
+
 fn icons() -> Result<()> {
-    let icons = ["󱓻 ", " ", "---------------------------------------------"]
-        .into_iter()
-        .map(|i| i.to_owned())
-        .collect();
+    let icons = [
+        "󱓻 ",
+        " ",
+        "",
+        ">",
+        ">",
+    ]
+    .into_iter()
+    .map(|i| i.to_owned())
+    .collect();
 
     let dmenu = DMenu::new(icons, Flags::default());
 
@@ -144,7 +225,7 @@ fn ssh() -> Result<()> {
 }
 
 fn power() -> Result<()> {
-    let menu = vec!["Poweroff", "Reboot", "Lock"];
+    let menu = vec!["Poweroff", "Reboot", "Lock", "Logout"];
     let options = menu.iter().map(|i| i.to_string()).collect();
     let flags = Flags::default();
     let dmenu = DMenu::new(options, flags);
@@ -154,6 +235,7 @@ fn power() -> Result<()> {
             "Poweroff" => spawn("sudo poweroff"),
             "Reboot" => spawn("sudo reboot"),
             "Lock" => spawn("slock"),
+            "Logout" => spawn("sudo pkill -KILL -u me"),
             _ => Ok(()),
         }
     } else {

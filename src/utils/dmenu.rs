@@ -48,6 +48,7 @@ impl DMenu {
     }
 }
 
+#[derive(Clone)]
 pub struct Flags {
     pub ignore_case: bool,
     pub nb: Color,

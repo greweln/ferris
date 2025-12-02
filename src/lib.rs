@@ -30,4 +30,3 @@ pub const FONT_SIZE: u8 = 12;
 
 // Dmenu
 pub const DMENU_FONT: &str = "TerminessNerdFont-18";
-pub const TEST: u32 = 0x3f3f3fff;
