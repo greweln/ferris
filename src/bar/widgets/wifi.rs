@@ -1,4 +1,5 @@
-use crate::{COLORS, utils::helpers::read_sys_file};
+use crate::COLORS;
+use penrose::util::spawn_for_output_with_args;
 use penrose_ui::{
     bar::widgets::{IntervalText, Text},
     core::TextStyle,
@@ -6,16 +7,21 @@ use penrose_ui::{
 use std::time::Duration;
 
 fn signal() -> String {
-    let raw = read_sys_file("/proc/net/wireless");
+    let output = spawn_for_output_with_args(
+        "nmcli",
+        &["-t", "-f", "IN-USE,SIGNAL", "dev", "wifi", "list"],
+    );
 
-    for line in raw.lines().skip(2) {
-        let parts: Vec<&str> = line.split_whitespace().collect();
-        if parts.len() >= 4 {
-            return format!("{}%", parts[2].trim_end_matches('.'));
+    if let Ok(output) = output {
+        for line in output.lines() {
+            if line.starts_with("*:") {
+                let signal = line.trim_start_matches("*:");
+                return format!("{}%", signal);
+            }
         }
     }
 
-    "X".to_string() // No signal
+    "X".to_string()
 }
 
 fn style() -> TextStyle {
