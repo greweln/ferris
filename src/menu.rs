@@ -225,7 +225,7 @@ fn ssh() -> Result<()> {
 }
 
 fn power() -> Result<()> {
-    let menu = vec!["Poweroff", "Reboot", "Lock", "Logout"];
+    let menu = vec!["Poweroff", "Reboot", "Lock", "Suspend", "Logout"];
     let options = menu.iter().map(|i| i.to_string()).collect();
     let flags = Flags::default();
     let dmenu = DMenu::new(options, flags);
@@ -234,7 +234,11 @@ fn power() -> Result<()> {
         match val.as_str().trim() {
             "Poweroff" => spawn("sudo poweroff"),
             "Reboot" => spawn("sudo reboot"),
-            "Lock" => spawn("slock"),
+            "Suspend" => spawn("systemctl suspend"),
+            "Lock" => spawn_with_args(
+                "i3lock",
+                &["-n", "-i", "/home/me/Git/ferris/screen-lock.png"],
+            ),
             "Logout" => spawn("sudo pkill -KILL -u me"),
             _ => Ok(()),
         }

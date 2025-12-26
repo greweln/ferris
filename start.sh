@@ -9,8 +9,6 @@ pgrep -fi /home/me/.config/ferris/start.sh | grep -v "^$pid$" | xargs -I{} kill 
 dunst &
 
 
-# Load/reload Xresources
-xrdb /home/me/.Xresources
 
 # Setup monitors and wallpapers
 /home/me/Git/configs/tpad/scripts/auto-setup-monitors.sh
@@ -29,10 +27,6 @@ xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 # Set the default X cursor pointer to left arrox
 xsetroot -cursor_name left_ptr
 
-# Delete old history.tmp files.
-find ~ -maxdepth 1 -name ".bash_history-*.tmp" -type f -mtime +0 -delete
 
-
-# Disable urxvt bell sound
-xset -b
-
+#  xautolock detects inacivity from x11 and triggers the suspend which locks the screen due to my screen-lock service
+xautolock -time 10 -locker "systemctl suspend" &
