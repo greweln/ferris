@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+# xhost +SI:localuser:me ?? lock screen
+
 # Make sure Ferris  runs only once
 pid=$$
 pgrep -fi /home/me/.config/ferris/start.sh | grep -v "^$pid$" | xargs -I{} kill {}
@@ -11,7 +13,7 @@ dunst &
 
 
 # Setup monitors and wallpapers
-/home/me/Git/configs/tpad/scripts/auto-setup-monitors.sh
+# /home/me/Git/configs/tpad/scripts/auto-setup-monitors.sh
 
 # Autoload Xresources
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources || echo "Failed to load .Xresources" >>  ~/logs/xresources.log
